@@ -1,13 +1,21 @@
 #!/bin/bash
 
-LAST_KERNEL=$(uname -r)
-sudo dpkg -l | tail -n +6 | grep -E 'linux-image-[0-9]+' | grep -Fv $(uname -r) | awk '{print $2}' | while read img_version; do
-	if [ "$img_version" != "linux-image-"$LAST_KERNEL ] || [ "$img_version" != "linux-image-5.13.0-20-generic" ]; then 
-		echo "Deleting kernel $img_version ..."
+# Kernel without "-generic"
+LAST_KERNEL=$(uname -r | awk -F'-' '{print $1"-"$2}')
+
+echo -e "\nThis script will delete old kernel packages (linux-[image|modules|headers]-X.YY.Z-AA-[-generic]*) that are different to the current Kernel"
+echo ""
+echo "CURRENT KERNEL VERSION: "$LAST_KERNEL
+echo -e $"\n"
+
+regex="linux-(image|headers|modules)-${LAST_KERNEL}[-generic]*"
+sudo dpkg -l | tail -n +6 | grep -E 'linux-[a-zA-Z]*-[0-9]+' | grep -Fv $(uname -r) | awk '{print $2}' | while read img_version; do
+  if [[ ! $img_version =~ $regex ]]; then
+		echo "Deleting package $img_version ..."
 		#sudo dpkg ––remove $img_version
-		sudo apt remove $img_version -y
+		sudo apt remove --purge $img_version -y
 	fi
 done
-  
-echo "Checking the linux-images left:"
-dpkg -l | tail -n +6 | grep -E 'linux-image-[0-9]+' | grep -Fv $(uname -r)
+
+echo -e "\n Checking the linux-[image|modules|headers] left:\n"
+dpkg -l | tail -n +6 | grep -E 'linux-[a-zA-Z]*-[0-9]+[-generic]*' | grep -Fv $(uname -r)
