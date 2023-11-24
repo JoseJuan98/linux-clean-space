@@ -41,7 +41,7 @@ clean_packages(){
     elif [ $DISTRO == 'fedora' ]; then
     	echo "Dnf packages cleaning" 
     	# Remove old versions of kernel
-    	sudo dnf remove $(dnf repoquery --installonly --latest-limit=-2 -q)
+    	sudo dnf remove -y $(dnf repoquery --installonly --latest-limit=-2 -q)
     	# When upgrading to a new version of Fedora, a cache is created. In theory, the cache is cleaned after the upgrade. If not, cleaning can be forced using the following command:
     	sudo dnf system-upgrade clean
     	sudo dnf clean packages
@@ -73,6 +73,12 @@ rm -rf ~/.cache/thumbnails/*
 # Docker
 echo -e "\n\n/!\ Careful!!!!!\n"
 docker system prune -a
+
+
+# Flatpak
+# flatpak uninstall --unused
+
+
 #echo "Do you want to clean conda?"
 #local choice
 # read -p "Enter choice [ 1 - 8] -> " choice
