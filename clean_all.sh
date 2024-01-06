@@ -13,9 +13,11 @@ DISTRO=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
 # WSL_DISTRO_NAME=$(env | grep -i WSL_DISTRO_NAME | awk -F= '$1=="WSL_DISTRO_NAME" { print $2 ;}')
 VERSION_ID=$(awk -F= '$1=="VERSION_ID" { print $2 ;}' /etc/os-release)
 DEBUG=0
+
 # ----------------------------------
 # Defined function
 # ----------------------------------
+
 continue_distro(){
   local key
   read key
@@ -74,6 +76,10 @@ rm -rf ~/.cache/thumbnails/*
 echo -e "\n\n/!\ Careful!!!!!\n"
 docker system prune -a
 
+# Jetbrains
+echo -e "\n\n _____ Jetbrains cache _____"
+echo -e "\nIf you are using Jetbrain products cleaning old installations and caches can"
+echo -e " save a few Gbs, so it's worth to check https://www.jetbrains.com/help/pycharm/cleaning-system-cache.html \n\n"
 
 # Flatpak
 # flatpak uninstall --unused
