@@ -29,27 +29,20 @@ continue_distro(){
 }
 
 clean_packages(){
-    if [ $DISTRO == 'ubuntu' ]; then
-    	echo "Apt packages cleaning"
-	echo "Size of data:"
-	sudo du -sh /var/cache/apt
+  if [ $DISTRO == 'ubuntu' ]; then
 
-	sudo apt autoremove
-	sudo apt autoclean
-	sudo apt clean
+    sudo bash -c extra/apt.sh
+    sudo bash -c extra/apt_old_kernels.sh
 
-	echo "Size of data after clean:"
-	sudo du -sh /var/cache/apt
-    elif [ $DISTRO == 'fedora' ]; then
-    	echo "Dnf packages cleaning" 
-    	# Remove old versions of kernel
-    	sudo dnf remove -y $(dnf repoquery --installonly --latest-limit=-2 -q)
-    	# When upgrading to a new version of Fedora, a cache is created. In theory, the cache is cleaned after the upgrade. If not, cleaning can be forced using the following command:
-    	sudo dnf system-upgrade clean
-    	sudo dnf clean packages
-    else
-    	echo -e "${RED} Distro $DISTRO is not supported by this script ${STD}"
-    fi
+  elif [ $DISTRO == 'fedora' ]; then
+
+    sudo bash 0c extra/dnf.sh
+
+  else
+
+    echo -e "${RED} Distro $DISTRO is not supported by this script ${STD}"
+
+  fi
 }
 
 # Check heaviest folders in /
@@ -80,6 +73,9 @@ docker system prune -a
 echo -e "\n\n _____ Jetbrains cache _____"
 echo -e "\nIf you are using Jetbrain products cleaning old installations and caches can"
 echo -e " save a few Gbs, so it's worth to check https://www.jetbrains.com/help/pycharm/cleaning-system-cache.html \n\n"
+
+sudo bash -c ./extra/snap.sh
+
 
 # Flatpak
 # flatpak uninstall --unused
