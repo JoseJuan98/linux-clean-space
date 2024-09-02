@@ -31,12 +31,12 @@ continue_distro(){
 clean_packages(){
   if [ $DISTRO == 'ubuntu' ]; then
 
-    sudo bash -c extra/apt.sh
-    sudo bash -c extra/apt_old_kernels.sh
+    sudo bash -c src/apt.sh
+    sudo bash -c src/apt_old_kernels.sh
 
   elif [ $DISTRO == 'fedora' ]; then
 
-    sudo bash 0c extra/dnf.sh
+    sudo bash -c src/dnf.sh
 
   else
 
@@ -74,7 +74,7 @@ echo -e "\n\n _____ Jetbrains cache _____"
 echo -e "\nIf you are using Jetbrain products cleaning old installations and caches can"
 echo -e " save a few Gbs, so it's worth to check https://www.jetbrains.com/help/pycharm/cleaning-system-cache.html \n\n"
 
-sudo bash -c ./extra/snap.sh
+sudo bash -c ./src/snap.sh
 
 
 # Flatpak
