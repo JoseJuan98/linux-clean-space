@@ -1,4 +1,4 @@
-# LinuxCleanSpace
+# Linux Clean Space
 
 Repo with bash cripts to clean space automatically in Linux Systems. 
 
