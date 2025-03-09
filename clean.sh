@@ -4,14 +4,8 @@
 # Variables
 # ----------------------------------
 RED='\033[0;41;30m'
-GREEN='\e[32m'
-RD='\033[1;31m'
-YELLOW='\033[0;33m'
 STD='\033[0;0;39m'
 DISTRO=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
-# WSL_DISTRO_NAME=$(env | grep -i WSL_DISTRO_NAME | awk -F= '$1=="WSL_DISTRO_NAME" { print $2 ;}')
-VERSION_ID=$(awk -F= '$1=="VERSION_ID" { print $2 ;}' /etc/os-release)
-DEBUG=0
 
 # ----------------------------------
 # Defined function
