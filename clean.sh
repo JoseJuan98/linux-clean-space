@@ -114,8 +114,7 @@ fi
 
 # Docker
 echo -e "\n\n _____ Docker Cache _____"
-echo -e "\n\n/!\ Careful!!!!!\n"
-docker system prune -a
+docker system prune
 
 # Jetbrains
 echo -e "\n\n _____ Jetbrains Cache _____"
