@@ -3,6 +3,11 @@
 # CLOSE ALL SNAPS BEFORE RUNNING THIS
 set -eu
 
+# if snap is not installed, exit
+if ! command -v snap &> /dev/null; then
+  exit 0
+fi
+
 echo -e "\n\n _____ Clean Unused Snaps _____\n"
 snaps_to_remove=$(LANG=en_US.UTF-8 snap list --all | awk '/disabled/{print $1, $3}')
 
