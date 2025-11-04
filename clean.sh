@@ -113,8 +113,10 @@ if [ -x "$(command -v conda)" ]; then
 fi
 
 # Docker
-echo -e "\n\n _____ Docker Cache _____"
-docker system prune
+if [ -x "$(command -v docker)" ]; then
+  echo -e "\n\n _____ Docker Cache _____"
+  docker system prune
+fi
 
 # Jetbrains
 echo -e "\n\n _____ Jetbrains Cache _____"
