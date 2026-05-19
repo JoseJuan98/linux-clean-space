@@ -6,9 +6,21 @@
 RED='\033[0;41;30m'
 STD='\033[0;0;39m'
 DISTRO=$(awk -F= '$1=="ID" { print $2 ;}' /etc/os-release)
+AUTO_CHOICE="ask" # Default behavior is to ask
+
+## ----------------------------------
+# Parse Arguments
+# ----------------------------------
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -y|--yes|y|yes) AUTO_CHOICE="yes"; shift ;;
+        -n|--no|n|no) AUTO_CHOICE="no"; shift ;;
+        *) echo -e "${RED}Unknown parameter passed: $1${STD}"; exit 1 ;;
+    esac
+done
 
 # ----------------------------------
-# Defined function
+# Defined functions
 # ----------------------------------
 
 continue_distro(){
@@ -21,8 +33,17 @@ continue_distro(){
   esac
 }
 
-# Choose if yo execute function by typing yes, y or n, no, and if it is not valid, it will ask again
+# Choose if you execute function by typing yes, y or n, no, and if it is not valid, it will ask again
+# Now respects -y/--yes and -n/--no flags
 choose(){
+  if [ "$AUTO_CHOICE" == "yes" ]; then
+    echo "Auto-accepting: Cleaning $1"
+    return 0
+  elif [ "$AUTO_CHOICE" == "no" ]; then
+    echo "Auto-rejecting: Skipping $1"
+    return 1
+  fi
+
   local choice
   while true; do
     read -p "Do you want to clean $1? (yes/no) -> " choice
@@ -115,7 +136,11 @@ fi
 # Docker
 if [ -x "$(command -v docker)" ]; then
   echo -e "\n\n _____ Docker Cache _____"
-  docker system prune
+  choose "Docker's cache"
+  if [ $? -eq 0 ]; then
+    echo "Cleaning docker cache"
+    docker system prune -a -f
+  fi
 fi
 
 # Jetbrains
